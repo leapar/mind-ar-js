@@ -35,6 +35,11 @@ const moduleConfig={
         alias:{
             'three/addons/':'three/examples/jsm/'
         }
+    },
+    server:{
+        host: "0.0.0.0",
+        port: "9001",
+        https: true,
     }
 };
 const faceAframeConfig=defineConfig({
