@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AR 眼镜试戴 - 完整版</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background: #000;
+      }
+      #container {
+        position: fixed;
+        inset: 0;
+      }
+      #arjs-video {
+        position: fixed;
+        inset: 0;
+        object-fit: cover;
+        z-index: -5;
+        display: none;
+        width: 100%;
+        height: 100%;
+      }
+      .controls {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 999;
+        display: flex;
+        gap: 12px;
+      }
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        background: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <div class="controls">
+      <button id="mode3d">3D 预览</button>
+      <button id="modeAR">AR 试戴</button>
+    </div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+          "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.34/vision_bundle.mjs"
+        }
+      }
+    </script>
+
+    <script>
+      window.isFrontCamera = true;
+    </script>
+    <script type="module">
+      import { TryOnEngine, StyleType } from "./TryOnEngine.js";
+
+      // ==============================================
+      // 启动
+      // ==============================================
+      const container = document.getElementById("container");
+
+      const engine = new TryOnEngine({
+        container,
+        styleType: StyleType.Glasses,
+      });
+
+      await engine.init();
+      await engine.loadGlassesModel("/923111322204.glb");
+
+      engine.animate();
+
+      document.getElementById("mode3d").onclick = () => {
+        try {
+          engine.setTryOnMode(false);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      document.getElementById("modeAR").onclick = () => {
+        try {
+          engine.setTryOnMode(true);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+    </script>
+  </body>
+</html>
